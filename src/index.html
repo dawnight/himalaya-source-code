@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>himalaya</title>
+</head>
+<body>
+<script>
+const splitHead = (str, seq) => {
+  const idx = str.indexOf(seq);
+  if (idx === -1) {
+    return [str];
+  }
+  return [str.substr(0, idx), str.substring(idx + 1)];
+};
+
+const unquote = str => {
+  let start = str.charAt(0);
+  let end = str.length - 1;
+  let isQuoteStart = start === "'" || start === '"';
+  if (isQuoteStart && str.charAt(end)) {
+    return str.slice(1, end);
+  }
+  return str;
+};
+
+function formatAttributes (attributes) {
+  return attributes.map(attribute => {
+    const parts = splitHead(attribute.trim(), '=');
+    const key = parts[0];
+    const value = typeof parts[1] === 'string'
+      ? unquote(parts[1])
+      : null;
+    return {key, value};
+  });
+}
+
+let attributes = ['name=mark', 'age=18'];
+
+let res = formatAttributes(attributes);
+console.log(res);
+
+</script>
+</body>
+</html>
