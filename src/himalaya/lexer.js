@@ -54,6 +54,7 @@ export default function lexer (str, options) {
 export function lex (state) {
   const {str, options: {childlessTags}} = state;
   const len = str.length;
+  // 遍历解析 state
   while (state.position.index < len) {
     const start = state.position.index;
     lexText(state);
@@ -72,23 +73,10 @@ export function lex (state) {
   }
 }
 
-const alphanumeric = /[A-Za-z0-9]/;
-export function findTextEnd (str, index) {
-  while (true) {
-    const textEnd = str.indexOf('<', index);
-    if (textEnd === -1) {
-      return textEnd;
-    }
-    const char = str.charAt(textEnd + 1);
-    if (char === '/' || char === '!' || alphanumeric.test(char)) {
-      return textEnd;
-    }
-    index = textEnd + 1;
-  }
-}
-
+// 解析文本信息
 export function lexText (state) {
   const type = 'text';
+  // 取出文本信息的内容和文本的位置
   const {str, position} = state;
   let textEnd = findTextEnd(str, position.index);
   if (textEnd === position.index) return;
@@ -101,6 +89,22 @@ export function lexText (state) {
   jumpPosition(position, str, textEnd);
   const end = copyPosition(position);
   state.tokens.push({type, content, position: {start, end}});
+}
+
+const alphanumeric = /[A-Za-z0-9]/;
+
+export function findTextEnd (str, index) {
+  while (true) {
+    const textEnd = str.indexOf('<', index);
+    if (textEnd === -1) {
+      return textEnd;
+    }
+    const char = str.charAt(textEnd + 1);
+    if (char === '/' || char === '!' || alphanumeric.test(char)) {
+      return textEnd;
+    }
+    index = textEnd + 1;
+  }
 }
 
 export function lexComment (state) {
@@ -144,12 +148,6 @@ export function lexTag (state) {
     state.tokens.push({type: 'tag-end', close, position: {end}});
   }
   return tagName;
-}
-
-// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#special-white-space
-const whitespace = /\s/;
-export function isWhitespaceChar (char) {
-  return whitespace.test(char);
 }
 
 export function lexTagName (state) {
@@ -309,4 +307,10 @@ export function lexSkipTag (tagName, state) {
     jumpPosition(position, str, tagState.position.index);
     break;
   }
+}
+
+// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#special-white-space
+const whitespace = /\s/;
+export function isWhitespaceChar (char) {
+  return whitespace.test(char);
 }

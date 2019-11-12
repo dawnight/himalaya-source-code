@@ -6,40 +6,30 @@
 </head>
 <body>
 <script>
-const splitHead = (str, seq) => {
-  const idx = str.indexOf(seq);
-  if (idx === -1) {
-    return [str];
-  }
-  return [str.substr(0, idx), str.substring(idx + 1)];
-};
+let str =
+`<div class="header">
+  <p class="title">MOVIE</p>
+  <ul>
+    <li>
+      <a class="link">HOME</a>
+    </li>
+    <li>
+      <a class="link">NEWS</a>
+    </li>
+  </ul>
+</div>`;
 
-const unquote = str => {
-  let start = str.charAt(0);
-  let end = str.length - 1;
-  let isQuoteStart = start === "'" || start === '"';
-  if (isQuoteStart && str.charAt(end)) {
-    return str.slice(1, end);
-  }
-  return str;
-};
+let arr = str.split('\n');
+let len = 0;
 
-function formatAttributes (attributes) {
-  return attributes.map(attribute => {
-    const parts = splitHead(attribute.trim(), '=');
-    const key = parts[0];
-    const value = typeof parts[1] === 'string'
-      ? unquote(parts[1])
-      : null;
-    return {key, value};
-  });
-}
-
-let attributes = ['name=mark', 'age=18'];
-
-let res = formatAttributes(attributes);
-console.log(res);
-
+arr.forEach((item, i) => {
+    console.group(`第 `, i , ' 行');
+    console.log(`字符串: %c|${item}|`, 'color: red;');
+    console.log(`长度: `, item.length);
+    len += item.length;
+    console.groupEnd();
+});
+console.log('总长度为 ', len);
 </script>
 </body>
 </html>
