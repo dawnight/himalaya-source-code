@@ -29,7 +29,6 @@ function parse(str, options = parseDefaults) {
   return format(nodes, options);
 }
 
-
 let str =
   `<div class="header">
   <p class="title">MOVIE</p>

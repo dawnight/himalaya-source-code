@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>position</title>
+</head>
+<body>
+<script>
+function feedPosition (position, str, len) {
+  const start = position.index;
+  const end = position.index = start + len;
+  for (let i = start; i < end; i++) {
+    const char = str.charAt(i);
+    if (char === '\n') {
+      position.line++;
+      position.column = 0;
+    } else {
+      position.column++;
+    }
+  }
+}
+
+let position = {
+    index: 4,
+    line: 0,
+    column: 0
+};
+
+let str =
+  `<div class="header">
+  <p class="title">MOVIE</p>
+  <ul>
+    <li>
+      <a class="link">HOME</a>
+    </li>
+    <li>
+      <a class="link">NEWS</a>
+    </li>
+  </ul>
+</div>`;
+
+let end = 20;
+
+function jumpPosition (position, str, end) {
+  const len = end - position.index;
+  return feedPosition(position, str, len);
+}
+
+jumpPosition(position, str, end);
+console.log(position);
+
+</script>
+</body>
+</html>
